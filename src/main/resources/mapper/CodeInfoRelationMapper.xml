@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pengq.trade.dao.CodeInfoRelationMapper" >
+
+  <resultMap id="BaseResultMap" type="com.pengq.trade.entity.CodeInfoRelation" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="trade_code_id" property="tradeCodeId" jdbcType="INTEGER" />
+    <result column="trade_info_id" property="tradeInfoId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, trade_code_id, trade_info_id, create_time
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from code_info_relation
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByCodeId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from code_info_relation
+    where trade_code_id = #{codeId,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from code_info_relation
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insertSelective" parameterType="com.pengq.trade.entity.CodeInfoRelation" >
+    insert into code_info_relation
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="tradeCodeId != null" >
+        trade_code_id,
+      </if>
+      <if test="tradeInfoId != null" >
+        trade_info_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="tradeCodeId != null" >
+        #{tradeCodeId,jdbcType=INTEGER},
+      </if>
+      <if test="tradeInfoId != null" >
+        #{tradeInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.pengq.trade.entity.CodeInfoRelation" >
+    update code_info_relation
+    <set >
+      <if test="tradeCodeId != null" >
+        trade_code_id = #{tradeCodeId,jdbcType=INTEGER},
+      </if>
+      <if test="tradeInfoId != null" >
+        trade_info_id = #{tradeInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

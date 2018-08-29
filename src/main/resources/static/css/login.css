@@ -1,0 +1,48 @@
+@charset "utf-8";
+
+*{ font-family:"微软雅黑","宋体";}
+body{
+    background:url(/images/background.png) center 170px no-repeat;
+    background-color:#fff;
+    font-size:14px;
+    color:#707070;
+}
+.page-header{border-bottom:0;margin:70px 0;}
+
+a.logo{
+    float:left;
+    display:inline-block;
+    font-size: 28px;
+    color: #426fad;
+    padding-top: 4px;
+    padding-left: 6px;
+}
+a.logo:hover{ text-decoration:none;}
+
+.container{	width:980px !important}
+.container-title{	width:520px !important;}
+.container-title img{float: left;}
+
+.logincont{width:980px;height:348px;margin-bottom:30px;}
+.loginbox{
+    float:right;
+    border:1px solid #e6e6e8;
+    margin:16px 50px auto auto;
+    background-color: #f5f6f7;
+}
+.form-group {margin-bottom: 20px;}
+.loginbox-title{background:#3e5764;color:#fff;line-height:46px;font-size:14px;padding-left:20px;}
+.loginbox .form-horizontal{padding:36px 20px 16px;}
+.loginbox .input-group-addon{background-color: #ced1d3;}
+.loginbox .glyphicon{ color:#fff }
+.loginbox .input-group-addon .form-control{border-color:#bcbcbc;}
+.loginbox .form-control{height:46px;}
+.loginbox .btn-primary{font-size: 18px;height:46px;background-color: #00aaff;border-color:#00aaff;}
+.loginbox .btn-primary:hover{background-color:#009eed;}
+footer{ text-align:center;padding-top:50px;}
+footer span{ font-family:Arial,sans-serif}
+
+
+.remembLable {
+    padding-top: 5px;
+}

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pengq.trade.dao.TradeCodeMapper" >
+  <resultMap id="BaseResultMap" type="com.pengq.trade.entity.TradeCode" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="type" property="type" typeHandler="com.pengq.trade.utils.EnumHandler" />
+    <result column="status" property="status" typeHandler="com.pengq.trade.utils.EnumHandler" />
+    <result column="token" property="token" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <!--级联查询-->
+  <sql id="detail">
+    a.id,a.password,a.code,a.type,a.status,a.create_time,c.username,c.telephone,c.address,b.create_time as tradeTime
+  </sql>
+
+  <resultMap id="DetailResultMap" type="com.pengq.trade.entity.TradeDetail" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="type" property="type" typeHandler="com.pengq.trade.utils.EnumHandler" />
+    <result column="status" property="status" typeHandler="com.pengq.trade.utils.EnumHandler" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="username" property="userName" jdbcType="VARCHAR" />
+    <result column="telephone" property="phone" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="tradeTime" property="tradeTime" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, code, password, type, status, token, create_time
+  </sql>
+
+  <select id="findAllTradeInfo" resultMap="DetailResultMap">
+    SELECT <include refid="detail"/>
+    FROM trade.trade_code a left join code_info_relation b on a.id = b.trade_code_id
+    left join trade_info c on b.trade_info_id = c.id
+    <if test="condition != null">
+      <where>
+        <if test="condition.startTime != null and condition.endTime != null">
+        b.create_time BETWEEN #{condition.startTime} AND #{condition.endTime}
+        ORDER BY b.create_time;
+        </if>
+      </where>
+    </if>
+    <if test="condition == null">
+       ORDER BY a.create_time;
+    </if>
+  </select>
+
+  <select id="findAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from trade_code;
+  </select>
+
+  <select id="selectByCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from trade_code
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByToken" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from trade_code
+    where token = #{token,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from trade_code
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from trade_code
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insertSelective" parameterType="com.pengq.trade.entity.TradeCode" >
+    insert into trade_code
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,typeHandler=com.pengq.trade.utils.EnumHandler},
+      </if>
+      <if test="status != null" >
+        #{status,typeHandler=com.pengq.trade.utils.EnumHandler},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pengq.trade.entity.TradeCode" >
+    update trade_code
+    <set >
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,typeHandler=com.pengq.trade.utils.EnumHandler},
+      </if>
+      <if test="status != null" >
+        status = #{status,typeHandler=com.pengq.trade.utils.EnumHandler},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="refreshToken" parameterType="com.pengq.trade.entity.TradeCode">
+    update trade_code
+    set token = #{token,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
