@@ -23,10 +23,15 @@ spring:
 mybatis:
   mapper-locations: classpath:mapper/*.xml
 
+aop:
+  point-cut: execution(* com.pengq.trade.controller..*.*(..))
 temp:
   file:
     path: D:\temp\
 mail:
-  to: 1905712224@qq.com
+  to: 11111@qq.com
+
+task:
+  cron: 0 0/1 * * * ?
 
 #rjbnco@163.com

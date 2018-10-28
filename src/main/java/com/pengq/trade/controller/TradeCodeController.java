@@ -31,7 +31,8 @@ public class TradeCodeController {
     TradeCodeService tradeCodeService;
 
     @GetMapping(value = "", produces = {"application/json;charset=UTF-8"})
-    public Object findAll(){
+    public Map<String, Object> findAll(){
+        logger.info("入口参数：{}","1");
         List<TradeDetail> details = tradeCodeService.listDetail(null);
         return RestResponse.create(GlobalResponseCode.SUCCESS).putData(details).build();
     }

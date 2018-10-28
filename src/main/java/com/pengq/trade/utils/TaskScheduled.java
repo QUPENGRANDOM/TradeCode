@@ -45,7 +45,7 @@ public class TaskScheduled {
     @Value("${temp.file.path}")
     private String path;
 
-    @Scheduled(cron = "0 0/1 * * * ?")
+    @Scheduled(cron = "${task.cron}")
     public void run() {
         System.out.println("----------------------running---------------------");
 

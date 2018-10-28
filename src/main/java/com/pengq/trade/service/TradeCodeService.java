@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -42,7 +43,22 @@ public class TradeCodeService {
     }
 
     public List<TradeDetail> listDetail(Condition condition) {
-        return tradeCodeMapper.findAllTradeInfo(condition);
+        List<TradeDetail> details = new ArrayList<>();
+        for (int i = 0; i < 300; i++) {
+            TradeDetail detail = new TradeDetail();
+            detail.setAddress("beijing" +(i+1));
+            detail.setUserName("test"+i);
+            detail.setCode(String.valueOf(10000 + i));
+            details.add(detail);
+        }
+        for (int i = 0; i < 300; i++) {
+            TradeDetail detail = new TradeDetail();
+            detail.setUserName("test"+(i+1));
+            detail.setAddress("beijing" +(i+2));
+            detail.setCode(String.valueOf(10000 + i));
+            details.add(detail);
+        }
+        return details;
     }
 
     private List<TradeCode> addTradeCode(List<TradeCode> codes) {

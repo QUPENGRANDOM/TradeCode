@@ -77,7 +77,7 @@ public abstract class ExcelHelper {
 
     private void excelOpen(String path) throws IOException, InvalidFormatException {
         in = new FileInputStream(new File(path));
-        workbook = WorkbookFactory.create(in);
+        workbook =null;
     }
 
     private boolean checkPath(String path) {

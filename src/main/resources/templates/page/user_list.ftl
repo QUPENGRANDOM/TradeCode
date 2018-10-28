@@ -51,6 +51,7 @@
 </html>
 <script>
     $("#users").DataTable({
+        dom: 'Bfrtip',
         paging: true,
         processing: false,
         lengthChange: false,
@@ -65,6 +66,13 @@
             url: "/api/v1/codes",
             dataSrc: 'data'
         },
+        buttons: [
+            {
+                extend: 'excel',
+                text:"导出",
+                header:false
+            }
+        ],
         columns: [
             {
                 data: "code"
