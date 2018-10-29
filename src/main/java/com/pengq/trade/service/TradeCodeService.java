@@ -1,10 +1,7 @@
 package com.pengq.trade.service;
 
 import com.pengq.trade.dao.TradeCodeMapper;
-import com.pengq.trade.entity.Condition;
-import com.pengq.trade.entity.TradeCode;
-import com.pengq.trade.entity.TradeDetail;
-import com.pengq.trade.entity.TradeStatus;
+import com.pengq.trade.entity.*;
 import com.pengq.trade.exception.GlobalException;
 import com.pengq.trade.response.GlobalResponseCode;
 import com.pengq.trade.utils.ExcelHelper;
@@ -13,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import pengq.common.excel.ExcelReader;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -42,19 +40,34 @@ public class TradeCodeService {
         return addTradeCode(tradeCodes);
     }
 
+    public List<Common> parseExcel(MultipartFile file) {
+        ExcelReader reader = null;
+        try {
+            reader = new ExcelReader(file.getInputStream());
+            return reader.read(Common.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            if (reader != null) {
+                reader.closeWorkbook();
+            }
+        }
+    }
+
     public List<TradeDetail> listDetail(Condition condition) {
         List<TradeDetail> details = new ArrayList<>();
         for (int i = 0; i < 300; i++) {
             TradeDetail detail = new TradeDetail();
-            detail.setAddress("beijing" +(i+1));
-            detail.setUserName("test"+i);
+            detail.setAddress("beijing" + (i + 1));
+            detail.setUserName("test" + i);
             detail.setCode(String.valueOf(10000 + i));
             details.add(detail);
         }
         for (int i = 0; i < 300; i++) {
             TradeDetail detail = new TradeDetail();
-            detail.setUserName("test"+(i+1));
-            detail.setAddress("beijing" +(i+2));
+            detail.setUserName("test" + (i + 1));
+            detail.setAddress("beijing" + (i + 2));
             detail.setCode(String.valueOf(10000 + i));
             details.add(detail);
         }

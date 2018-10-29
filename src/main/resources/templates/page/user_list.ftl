@@ -10,10 +10,10 @@
                 <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                     <h4 class="page-title">${title}</h4></div>
                 <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                    <a id="import" class="btn  pull-right m-l-20 btn-rounded btn-outline waves-effect waves-light">
-                        <form method="POST" action="/api/v1/codes/import" enctype="multipart/form-data">
-                            <input type="file" name="file" style="display: inline-block;width: 180px;" />
-                            <input type="submit" value="导入" />
+                    <a class="btn  pull-right m-l-20 btn-rounded btn-outline waves-effect waves-light">
+                        <form id="import">
+                            <input type="file" name="file" style="display: inline-block;width: 180px;"/>
+                            <input type="submit" value="导入"/>
                         </form>
                     </a>
                 </div>
@@ -28,10 +28,6 @@
                                 <th>兑换码</th>
                                 <th>物品</th>
                                 <th>兑换状态</th>
-                                <th>兑换时间</th>
-                                <th>收件人</th>
-                                <th>收件地址</th>
-                                <th>联系电话</th>
                             </tr>
                             </thead>
                         </table>
@@ -41,7 +37,7 @@
         </div>
         <footer class="footer text-center">
             <a title="作者：QUPENG QQ：994004869" style="color: #000">
-                2018©北京瑞嘉博纳企业策划有限公司
+            <#--2018©北京瑞嘉博纳企业策划有限公司-->测试datatable导出excel
             </a>
         </footer>
     </div>
@@ -50,73 +46,64 @@
 </body>
 </html>
 <script>
-    $("#users").DataTable({
-        dom: 'Bfrtip',
-        paging: true,
-        processing: false,
-        lengthChange: false,
-        ordering: true,
-        autoWidth: true,
-        info: true,
-        serverSide: false,
-        fixedHeader: true,
-        searching: true,
-        aLengthMenu: [10],
-        ajax: {
-            url: "/api/v1/codes",
-            dataSrc: 'data'
-        },
-        buttons: [
-            {
-                extend: 'excel',
-                text:"导出",
-                header:false
-            }
-        ],
-        columns: [
-            {
-                data: "code"
-            },
-            {
-                data: "type",
-                render: function (data, type, full, meta) {
-                    if (data === "MOLI"){
-                        return "生态茉莉龙豪礼盒";
-                    }else if (data === "BAICHA"){
-                        return "生态福鼎白茶小锡罐礼盒";
-                    }else if (data === "TIEGUANYIN"){
-                        return "生态特级手制铁观音小锡罐礼盒";
-                    }
-                    return data;
+    $(document).ready(function () {
+        init([]);
+
+        $('#import').submit(function (e) {
+            e.preventDefault();
+            var data = new FormData(document.getElementById("import"));
+            $.ajax({
+                url: "/api/v1/codes/import",
+                type: "post",
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function (res) {
+                    $("#users").DataTable().destroy();
+                    init(res.data);
+                },
+                error: function (e) {
+
                 }
-            },
-            {
-                data: "status",
-                render: function (data, type, full, meta) {
-                    if (data === "UNFINISHED"){
-                        return "未兑换";
-                    }else if (data === "COMPLETED"){
-                        return "已兑换";
-                    }
-                    return data;
-                }
-            },
-            {
-                data: "tradeTime",
-                render: function (data, type, full, meta) {
-                    return data;
-                }
-            },
-            {
-                data: "userName"
-            },
-            {
-                data: "address"
-            },
-            {
-                data: "phone"
-            }
-        ],
-        language: {url: '/lang/datatable.chs.json'}
+            });
+        });
+
     });
+
+    function init(data) {
+        $("#users").DataTable({
+            dom: 'Bfrtip',
+            paging: true,
+            processing: false,
+            lengthChange: false,
+            ordering: true,
+            autoWidth: true,
+            info: true,
+            serverSide: false,
+            fixedHeader: true,
+            searching: false,
+            aLengthMenu: [10],
+            data: data,
+            buttons: [
+                {
+                    extend: 'excel',
+                    text: "导出",
+                    header: false
+                }
+            ],
+            columns: [
+                {
+                    data: "name"
+                },
+                {
+                    data: "value"
+                },
+                {
+                    data: "location"
+                }
+            ],
+            language: {url: '/lang/datatable.chs.json'}
+        });
+    }
+
 </script>

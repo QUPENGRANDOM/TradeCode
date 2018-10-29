@@ -53,14 +53,12 @@ public class ExportExcel {
             if (i == 0) {
                 for (int j = 0; j < heads.size(); j++) {
                     HSSFCell cell = row.createCell(j);
-                    cell.setCellType(HSSFCell.CELL_TYPE_STRING);
                     cell.setCellStyle(cellStyle);
                     cell.setCellValue(header.get(heads.get(j)));
                 }
             } else {
                 for (int z = 0; z < heads.size(); z++) {
                     HSSFCell cell = row.createCell(z);
-                    cell.setCellType(HSSFCell.CELL_TYPE_STRING);
                     cell.setCellStyle(cellStyle);
                     TradeDetail detail = sheetData.get(i-1);
                     Object o = FieldUtil.invoke(detail,heads.get(z));

@@ -1,5 +1,6 @@
 package com.pengq.trade.controller;
 
+import com.pengq.trade.entity.Common;
 import com.pengq.trade.entity.TradeCode;
 import com.pengq.trade.entity.TradeDetail;
 import com.pengq.trade.exception.GlobalException;
@@ -63,7 +64,7 @@ public class TradeCodeController {
         if (file.isEmpty()){
             return RestResponse.create(GlobalResponseCode.SUCCESS).build();
         }
-        List<TradeCode> failCodes = tradeCodeService.saveTradeCode(file);
+        List<Common> failCodes = tradeCodeService.parseExcel(file);
         if(failCodes == null || failCodes.isEmpty()){
             return RestResponse.create(GlobalResponseCode.SUCCESS).build();
         }
