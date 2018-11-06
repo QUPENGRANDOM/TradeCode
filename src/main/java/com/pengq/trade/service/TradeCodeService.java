@@ -5,6 +5,7 @@ import com.pengq.trade.entity.*;
 import com.pengq.trade.exception.GlobalException;
 import com.pengq.trade.response.GlobalResponseCode;
 import com.pengq.trade.utils.ExcelHelper;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,13 +41,15 @@ public class TradeCodeService {
         return addTradeCode(tradeCodes);
     }
 
-    public List<Common> parseExcel(MultipartFile file) {
+    public String parseExcel(MultipartFile file) {
         ExcelReader reader = null;
         try {
             reader = new ExcelReader(file.getInputStream());
-            return reader.read(Common.class);
+            List<Common> list = reader.read(Common.class);
+            String md5Key = DigestUtils.md5Hex(file.getInputStream());
+            CacheManage.setContent(md5Key,list,10*1000*60);
+            return md5Key;
         } catch (IOException e) {
-            e.printStackTrace();
             return null;
         } finally {
             if (reader != null) {

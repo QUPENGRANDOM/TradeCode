@@ -1,5 +1,6 @@
 package com.pengq.trade.controller;
 
+import com.pengq.trade.entity.CacheManage;
 import com.pengq.trade.entity.Common;
 import com.pengq.trade.entity.TradeCode;
 import com.pengq.trade.entity.TradeDetail;
@@ -60,14 +61,18 @@ public class TradeCodeController {
     }
 
     @RequestMapping(value = "/import", method = RequestMethod.POST)
-    public Object importTradeCode(@RequestParam("file") MultipartFile file) throws GlobalException {
+    public Object importTradeCode(@RequestParam("file") MultipartFile file){
         if (file.isEmpty()){
             return RestResponse.create(GlobalResponseCode.SUCCESS).build();
         }
-        List<Common> failCodes = tradeCodeService.parseExcel(file);
-        if(failCodes == null || failCodes.isEmpty()){
-            return RestResponse.create(GlobalResponseCode.SUCCESS).build();
-        }
-        return RestResponse.create(GlobalResponseCode.SUCCESS).putData(failCodes).build();
+
+        String cacheKey = tradeCodeService.parseExcel(file);
+        return RestResponse.create(GlobalResponseCode.SUCCESS).putData(cacheKey).build();
+    }
+
+    @RequestMapping(value = "/get", method = RequestMethod.GET)
+    public Object getTradeCode(@RequestParam("key") String cacheKey){
+        Object data = CacheManage.getContent(cacheKey);
+        return RestResponse.create(GlobalResponseCode.SUCCESS).putData(cacheKey).build();
     }
 }

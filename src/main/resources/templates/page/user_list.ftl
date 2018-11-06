@@ -81,8 +81,12 @@
             info: true,
             serverSide: false,
             fixedHeader: true,
-            searching: false,
-            aLengthMenu: [10],
+            searching: true,
+            aLengthMenu: [20],
+            ajax: {
+                url: '/api/v1/codes',
+                dataSrc: 'data'
+            },
             data: data,
             buttons: [
                 {
