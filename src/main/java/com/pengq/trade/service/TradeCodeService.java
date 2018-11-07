@@ -12,12 +12,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pengq.common.excel.ExcelReader;
+import pengq.common.excel.model.MyWorkbook;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class TradeCodeService {
@@ -41,15 +43,17 @@ public class TradeCodeService {
         return addTradeCode(tradeCodes);
     }
 
-    public String parseExcel(MultipartFile file) {
+    public MyWorkbook parseExcel(MultipartFile file) {
         ExcelReader reader = null;
         try {
-            reader = new ExcelReader(file.getInputStream());
-            List<Common> list = reader.read(Common.class);
-            String md5Key = DigestUtils.md5Hex(file.getInputStream());
-            CacheManage.setContent(md5Key,list,10*1000*60);
-            return md5Key;
-        } catch (IOException e) {
+            InputStream inputStream = file.getInputStream();
+            reader = new ExcelReader(inputStream);
+            MyWorkbook myWorkbook = reader.read();
+//            String md5Key = DigestUtils.md5Hex(myWorkbook.toString());
+
+//            CacheManage.setContent(md5Key,myWorkbook,10*1000*60);
+            return myWorkbook;
+        } catch (Exception e) {
             return null;
         } finally {
             if (reader != null) {
@@ -74,7 +78,10 @@ public class TradeCodeService {
             detail.setCode(String.valueOf(10000 + i));
             details.add(detail);
         }
+        List<String> strings = new ArrayList<>(2);
+        strings.add("sssd");
         return details;
+
     }
 
     private List<TradeCode> addTradeCode(List<TradeCode> codes) {

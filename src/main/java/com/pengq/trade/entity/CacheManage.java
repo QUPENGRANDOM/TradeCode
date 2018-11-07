@@ -29,6 +29,16 @@ public class CacheManage {
         }
     }
 
+    public static <T> T getContent(String key,Class<T> clazz) {
+        Cache cache = getContent(key);
+
+        if (cache == null){
+            return null;
+        }
+
+        return clazz.cast(cache.getValue());
+    }
+
     //加入缓存
     public static void setContent(String key, Object content) {
         Cache cache = new Cache(key, content);

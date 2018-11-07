@@ -1,9 +1,6 @@
 package com.pengq.trade.controller;
 
-import com.pengq.trade.entity.CacheManage;
-import com.pengq.trade.entity.Common;
-import com.pengq.trade.entity.TradeCode;
-import com.pengq.trade.entity.TradeDetail;
+import com.pengq.trade.entity.*;
 import com.pengq.trade.exception.GlobalException;
 import com.pengq.trade.response.GlobalResponseCode;
 import com.pengq.trade.response.RestResponse;
@@ -17,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import pengq.common.excel.model.MyWorkbook;
 
 import java.io.*;
 import java.util.*;
@@ -66,13 +64,14 @@ public class TradeCodeController {
             return RestResponse.create(GlobalResponseCode.SUCCESS).build();
         }
 
-        String cacheKey = tradeCodeService.parseExcel(file);
-        return RestResponse.create(GlobalResponseCode.SUCCESS).putData(cacheKey).build();
+        MyWorkbook myWorkbook = tradeCodeService.parseExcel(file);
+        return RestResponse.create(GlobalResponseCode.SUCCESS).putData(myWorkbook).build();
     }
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
-    public Object getTradeCode(@RequestParam("key") String cacheKey){
-        Object data = CacheManage.getContent(cacheKey);
-        return RestResponse.create(GlobalResponseCode.SUCCESS).putData(cacheKey).build();
+    public Object getTradeCode(@RequestParam(value = "key",required = false) String cacheKey){
+        MyWorkbook content = CacheManage.getContent(cacheKey,MyWorkbook.class);
+
+        return RestResponse.create(GlobalResponseCode.SUCCESS).putData(content).build();
     }
 }

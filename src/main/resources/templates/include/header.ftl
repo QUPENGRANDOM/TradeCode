@@ -14,6 +14,7 @@
     <link href="/css/animate.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/spinners.css" rel="stylesheet">
     <!-- color CSS -->
     <link href="/css/colors/green.css" id="theme" rel="stylesheet">
     <link href="/css/dataTables.bootstrap.min.css" rel="stylesheet">

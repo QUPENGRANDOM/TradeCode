@@ -42,7 +42,7 @@ public class HomeController {
 
     @GetMapping("/list")
     public String getListPage(){
-        return "/page/user_list";
+        return "/page/test_page";
     }
 
 }

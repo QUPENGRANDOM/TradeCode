@@ -10,6 +10,7 @@
 <script src="../js/waves.js"></script>
 <!-- Custom Theme JavaScript -->
 <script src="../js/custom.js"></script>
+<script src="../js/cbpFWTabs.js"></script>
 <script src="../js/jQuery.style.switcher.js"></script>
 <script src="../js/bootstrap-datepicker.min.js"></script>
 <script src="../js/sweetalert.min.js"></script>
