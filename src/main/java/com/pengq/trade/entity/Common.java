@@ -69,4 +69,14 @@ public class Common {
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
+
+    @Override
+    public String toString() {
+        return "Common{" +
+                "name='" + name + '\'' +
+                ", value=" + value +
+                ", location='" + location + '\'' +
+                ", createTime=" + createTime +
+                '}';
+    }
 }

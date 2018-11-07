@@ -588,21 +588,38 @@
                 <!-- /.col-lg-12 -->
             </div>
             <!-- .row -->
+            <script>
+                var $id;
+                var $tabsContainer = $("<section></section>").addClass("m-b-40");
+                var $tabShape = $("<svg></svg>").addClass("hidden").append(
+                        $("<defs></defs>").append(
+                                $('<path id="tabshape" d="M80,60C34,53.5,64.417,0,0,0v60H80z"/>');
+                ))
+
+                var $tabBars = $("<div></div>").addClass("sttabs tabs-style-shape").attr("style","max-width: inherit");
+                var $tabBarsNav = $("<nav></nav>");
+
+
+                $tabBars.append($tabBarsNav);
+                $tabsContainer.append($tabBars);
+                $id.append($tabsContainer.after($tabShape));
+
+
+            </script>
             <div class="row">
                 <div class="col-md-12">
                     <div class="white-box">
-
-
                         <section class="m-b-40">
-                            <div class="sttabs tabs-style-shape">
+                            <div class="sttabs tabs-style-shape" style="max-width: inherit">
                                 <nav>
                                     <ul>
                                         <li>
                                             <a href="#section-shape-1">
-                                                <svg viewBox="0 0 80 50" preserveAspectRatio="none">
+                                                <svg viewBox="0 0 80 60" preserveAspectRatio="none">
                                                     <use xlink:href="#tabshape"></use>
                                                 </svg>
-                                                <span>Home</span> </a>
+                                                <span>Home</span>
+                                            </a>
                                         </li>
                                         <li>
                                             <a href="#section-shape-2">
@@ -624,37 +641,43 @@
                                                 </svg>
                                                 <span>Work</span> </a>
                                         </li>
-                                        <li>
-                                            <a href="#section-shape-4">
-                                                <svg viewBox="0 0 80 60" preserveAspectRatio="none">
-                                                    <use xlink:href="#tabshape"></use>
-                                                </svg>
-                                                <svg viewBox="0 0 80 60" preserveAspectRatio="none">
-                                                    <use xlink:href="#tabshape"></use>
-                                                </svg>
-                                                <span>Portfolio</span> </a>
-                                        </li>
-                                        <li>
-                                            <a href="#section-shape-5">
-                                                <svg viewBox="0 0 80 60" preserveAspectRatio="none">
-                                                    <use xlink:href="#tabshape"></use>
-                                                </svg>
-                                                <span>Contact</span> </a>
-                                        </li>
                                     </ul>
                                 </nav>
                                 <div class="content-wrap">
                                     <section id="section-shape-1">
-                                        <h3>Best Clean Tab ever</h3>
+                                        <table id="users" class="table table-hover table-condensed table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>兑换码</th>
+                                                <th>物品</th>
+                                                <th>兑换状态</th>
+                                            </tr>
+                                            </thead>
+                                        </table>
                                     </section>
                                     <section id="section-shape-2">
-                                        <h2>Tabbing 2</h2></section>
+                                        <table id="users2" class="table table-hover table-condensed table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>兑换码2</th>
+                                                <th>物品2</th>
+                                                <th>兑换状态2</th>
+                                            </tr>
+                                            </thead>
+                                        </table>
+                                    </section>
                                     <section id="section-shape-3">
-                                        <h2>Tabbing 3</h2></section>
-                                    <section id="section-shape-4">
-                                        <h2>Tabbing 4</h2></section>
-                                    <section id="section-shape-5">
-                                        <h2>Tabbing 5</h2></section>
+                                        <table id="users1" class="table table-hover table-condensed table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>兑换码1</th>
+                                                <th>物品1</th>
+                                                <th>兑换状态1</th>
+                                            </tr>
+                                            </thead>
+                                        </table>
+                                    </section>
+
                                 </div>
                                 <!-- /content -->
                             </div>
