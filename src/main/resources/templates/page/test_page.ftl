@@ -588,24 +588,15 @@
                 <!-- /.col-lg-12 -->
             </div>
             <!-- .row -->
-            <script>
-                var $id;
-                var $tabsContainer = $("<section></section>").addClass("m-b-40");
-                var $tabShape = $("<svg></svg>").addClass("hidden").append(
-                        $("<defs></defs>").append(
-                                $('<path id="tabshape" d="M80,60C34,53.5,64.417,0,0,0v60H80z"/>');
-                ))
 
-                var $tabBars = $("<div></div>").addClass("sttabs tabs-style-shape").attr("style","max-width: inherit");
-                var $tabBarsNav = $("<nav></nav>");
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="white-box" id="tabsContainer">
 
+                    </div>
+                </div>
+            </div>
 
-                $tabBars.append($tabBarsNav);
-                $tabsContainer.append($tabBars);
-                $id.append($tabsContainer.after($tabShape));
-
-
-            </script>
             <div class="row">
                 <div class="col-md-12">
                     <div class="white-box">
@@ -626,20 +617,10 @@
                                                 <svg viewBox="0 0 80 60" preserveAspectRatio="none">
                                                     <use xlink:href="#tabshape"></use>
                                                 </svg>
-                                                <svg viewBox="0 0 80 60" preserveAspectRatio="none">
-                                                    <use xlink:href="#tabshape"></use>
-                                                </svg>
+                                            <#--<svg viewBox="0 0 80 60" preserveAspectRatio="none">-->
+                                            <#--<use xlink:href="#tabshape"></use>-->
+                                            <#--</svg>-->
                                                 <span>Design</span> </a>
-                                        </li>
-                                        <li>
-                                            <a href="#section-shape-3">
-                                                <svg viewBox="0 0 80 60" preserveAspectRatio="none">
-                                                    <use xlink:href="#tabshape"></use>
-                                                </svg>
-                                                <svg viewBox="0 0 80 60" preserveAspectRatio="none">
-                                                    <use xlink:href="#tabshape"></use>
-                                                </svg>
-                                                <span>Work</span> </a>
                                         </li>
                                     </ul>
                                 </nav>
@@ -649,35 +630,14 @@
                                             <thead>
                                             <tr>
                                                 <th>兑换码</th>
-                                                <th>物品</th>
-                                                <th>兑换状态</th>
                                             </tr>
                                             </thead>
                                         </table>
                                     </section>
                                     <section id="section-shape-2">
                                         <table id="users2" class="table table-hover table-condensed table-bordered">
-                                            <thead>
-                                            <tr>
-                                                <th>兑换码2</th>
-                                                <th>物品2</th>
-                                                <th>兑换状态2</th>
-                                            </tr>
-                                            </thead>
                                         </table>
                                     </section>
-                                    <section id="section-shape-3">
-                                        <table id="users1" class="table table-hover table-condensed table-bordered">
-                                            <thead>
-                                            <tr>
-                                                <th>兑换码1</th>
-                                                <th>物品1</th>
-                                                <th>兑换状态1</th>
-                                            </tr>
-                                            </thead>
-                                        </table>
-                                    </section>
-
                                 </div>
                                 <!-- /content -->
                             </div>
@@ -685,7 +645,7 @@
                         </section>
                         <svg class="hidden">
                             <defs>
-                                <path id="tabshape" d="M80,60C34,53.5,64.417,0,0,0v60H80z"/>
+                                <path id="tabshape" d="M80,60C34,53.5,64.417,0,0,0v60H80z"></path>
                             </defs>
                         </svg>
                     </div>
@@ -804,6 +764,50 @@
 <script src="../js/custom.js"></script>
 <script src="../js/cbpFWTabs.js"></script>
 <script type="text/javascript">
+    initTabTableBar();
+
+    function initTabTableBar() {
+
+        var $id = $("#tabsContainer");
+        var $tabsContainer = $("<section></section>").addClass("m-b-40");
+        var $tabShape = $("<svg></svg>").addClass("hidden").append(
+                $("<defs></defs>").append(
+                        $("<path><path/>").attr("id", "tabshape")
+                )
+        );
+
+        var $tabBars = $("<div></div>").addClass("sttabs tabs-style-shape").attr("style", "max-width: inherit");
+        var $tabBarsNav = $("<nav></nav>");
+
+        var $tabUl = $("<ul></ul>");
+        var sheetNames = ["sheet1", "sheet2", "sheet3"];
+
+        for (var j = 0; j < sheetNames.length; j++) {
+            var $li = buildTab(sheetNames[j]);
+
+            $tabUl.append($li);
+        }
+
+        $tabBarsNav.append($tabUl);
+        $tabBars.append($tabBarsNav);
+        $tabsContainer.append($tabBars);
+        $id.append($tabsContainer).append($tabShape);
+
+
+    }
+
+    function buildTab(sheetName) {
+        var prefix = "#tab-table";
+        var $item = $("<li></li>").append(
+                $("<a></a>").attr("href", prefix + "-" + sheetName).append(
+                        $("<svg></svg>").attr("viewBox", "0 0 80 60").attr("preserveAspectRatio", "none").append(
+                                $("<use></<use>").attr("xlink:href", "#tabshape")
+                        ))
+        ).append($("<span></span>").text(sheetName));
+
+        return $item;
+    }
+
     (function () {
         [].slice.call(document.querySelectorAll('.sttabs')).forEach(function (el) {
             new CBPFWTabs(el);
