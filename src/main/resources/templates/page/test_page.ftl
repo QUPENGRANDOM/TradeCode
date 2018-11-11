@@ -19,6 +19,7 @@
     <link href="../css/style.css" rel="stylesheet">
     <!-- color CSS -->
     <link href="../css/colors/blue.css" id="theme" rel="stylesheet">
+    <link href="/css/dataTables.bootstrap.min.css" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -572,6 +573,17 @@
     <div id="page-wrapper">
         <div class="container-fluid">
             <div class="row bg-title">
+                <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                    <a class="btn  pull-right m-l-20 btn-rounded btn-outline waves-effect waves-light">
+                        <form id="import">
+                            <input type="file" name="file" style="display: inline-block;width: 180px;"/>
+                            <input type="submit" value="导入"/>
+                        </form>
+                    </a>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <div class="row bg-title">
                 <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                     <h4 class="page-title">Tabs</h4></div>
                 <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12"><a
@@ -592,69 +604,11 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="white-box" id="tabsContainer">
-                        <svg class="hidden">
-                            <defs>
-                                <path id="tabshape" d="M80,60C34,53.5,64.417,0,0,0v60H80z"></path>
-                            </defs>
-                        </svg>
+
                     </div>
                 </div>
             </div>
 
-        <#--  <div class="row">
-              <div class="col-md-12">
-                  <div class="white-box">
-                      <section class="m-b-40">
-                          <div class="sttabs tabs-style-shape" style="max-width: inherit">
-                              <nav>
-                                  <ul>
-                                      <li>
-                                          <a href="#section-shape-1">
-                                              <svg viewBox="0 0 80 60" preserveAspectRatio="none">
-                                                  <use xlink:href="#tabshape"></use>
-                                              </svg>
-                                              <span>Home</span>
-                                          </a>
-                                      </li>
-                                      <li>
-                                          <a href="#section-shape-2">
-                                              <svg viewBox="0 0 80 60" preserveAspectRatio="none">
-                                                  <use xlink:href="#tabshape"></use>
-                                              </svg>
-                                          &lt;#&ndash;<svg viewBox="0 0 80 60" preserveAspectRatio="none">&ndash;&gt;
-                                          &lt;#&ndash;<use xlink:href="#tabshape"></use>&ndash;&gt;
-                                          &lt;#&ndash;</svg>&ndash;&gt;
-                                              <span>Design</span> </a>
-                                      </li>
-                                  </ul>
-                              </nav>
-                              <div class="content-wrap">
-                                  <section id="section-shape-1">
-                                      <table id="users" class="table table-hover table-condensed table-bordered">
-                                          <thead>
-                                          <tr>
-                                              <th>兑换码</th>
-                                          </tr>
-                                          </thead>
-                                      </table>
-                                  </section>
-                                  <section id="section-shape-2">
-                                      <table id="users2" class="table table-hover table-condensed table-bordered">
-                                      </table>
-                                  </section>
-                              </div>
-                              <!-- /content &ndash;&gt;
-                          </div>
-                          <!-- /tabs &ndash;&gt;
-                      </section>
-                      <svg class="hidden">
-                          <defs>
-                              <path id="tabshape" d="M80,60C34,53.5,64.417,0,0,0v60H80z"></path>
-                          </defs>
-                      </svg>
-                  </div>
-              </div>
-          </div>-->
             <!-- /.row -->
             <!-- .right-sidebar -->
             <div class="right-sidebar">
@@ -769,39 +723,61 @@
 <script src="../js/cbpFWTabs.js"></script>
 <!--Style Switcher -->
 <script src="../js/jQuery.style.switcher.js"></script>
+<script src="../js/jquery.dataTables.min.js"></script>
+<script src="../js/dataTables.bootstrap.min.js"></script>
 
 <script type="text/javascript">
-    initTabTableBar();
+    $(document).ready(function () {
+        // init([]);
 
-    function initTabTableBar() {
+        $('#import').submit(function (e) {
+            e.preventDefault();
+            var data = new FormData(document.getElementById("import"));
+            $.ajax({
+                url: "/api/v1/codes/import",
+                type: "post",
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function (res) {
+                    initTabTableBar(res.data);
+                    initDataTable(res.data);
+                },
+                error: function (e) {
 
+                }
+            });
+        });
+
+    });
+    
+    function initTabTableBar(workBook) {
         var $id = $("#tabsContainer");
         var $tabsContainer = $("<section></section>").addClass("m-b-40");
-        var $tabShape = $("<svg></svg>").addClass("hidden").append(
-                $("<defs></defs>").append(
-                        $('<path id="tabshape" d="M80,60C34,53.5,64.417,0,0,0v60H80z"></path>')
-                )
-        );
+        var $tabShape = $('<svg class="hidden"><defs><path id="tabshape" d="M80,60C34,53.5,64.417,0,0,0v60H80z"></path></defs></svg>');
 
         var $tabBars = $("<div></div>").addClass("sttabs tabs-style-shape").attr("style", "max-width: inherit");
         var $tabBarsNav = $("<nav></nav>");
 
         var $tabUl = $("<ul></ul>");
         var $contentWrap = $("<div></div>").addClass("content-wrap");
-        var sheetNames = ["sheet1", "sheet2", "sheet3","sheet4","sheet5"];
+        var sheetNames = workBook["sheets"];
 
         for (var j = 0; j < sheetNames.length; j++) {
             var $li = buildTab(sheetNames[j],j);
             $tabUl.append($li);
 
             var $item = buildContentItem(sheetNames[j]);
+            var $table = bindTable(sheetNames[j]);
+            $table.append(buildTableHeader(workBook["sheetMapper"][sheetNames[j]]["cells"]));
+            $item.append($table);
             $contentWrap.append($item)
         }
 
         $tabBarsNav.append($tabUl);
         $tabBars.append($tabBarsNav).append($contentWrap);
         $tabsContainer.append($tabBars);
-        $id.append($tabsContainer);
+        $id.append($tabsContainer).append($tabShape);
 
         (function () {
             [].slice.call(document.querySelectorAll('.sttabs')).forEach(function (el) {
@@ -810,10 +786,63 @@
         })();
     }
 
+    function initDataTable(workBook) {
+        var sheetNames = workBook["sheets"];
+        for (var j = 0; j < sheetNames.length; j++) {
+            initTable(workBook["sheetMapper"][sheetNames[j]],sheetNames[j]);
+        }
+    }
+
+    function initTable(param,sheetName) {
+        var data = [], columns = [];
+
+        if (param !== null && param.length !== 0) {
+            var cells = param["cells"];
+            for (var i = 0; i < cells.length; i++) {
+                var d = {};
+                d["data"] = cells[i];
+                columns.push(d);
+            }
+
+            data = param["rows"]
+        }
+        var options = {
+            paging: true,
+            processing: false,
+            lengthChange: false,
+            ordering: true,
+            autoWidth: true,
+            info: true,
+            serverSide: false,
+            fixedHeader: true,
+            searching: true,
+            aLengthMenu: [20],
+            language: {url: '/lang/datatable.chs.json'}
+        };
+        if (data.length !==0){
+            options.data = data;
+        }
+        if (data.length !==0){
+            options.columns = columns;
+        }
+        $("#table-item-"+sheetName).DataTable(options);
+    }
 
     function buildContentItem(sheetName) {
         var prefix = "#tab-table";
-        return $("<section></section>").attr("id", prefix + "-" + sheetName).text(sheetName);
+        return $("<section></section>").attr("id", prefix + "-" + sheetName);
+    }
+    
+    function bindTable(sheetName) {
+        return $("<table></table>").addClass("table table-hover table-condensed table-bordered").attr("id", "table-item-" + sheetName);
+    }
+
+    function buildTableHeader(cells) {
+        var $tr = $("<tr></tr>");
+        cells.forEach(function (x) {
+           $tr.append($("<th></th>").text(x));
+        });
+        return $("<thead></thead>").append($tr);
     }
 
     function buildTab(sheetName,index) {
